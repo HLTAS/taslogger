@@ -156,9 +156,9 @@ void LogWriter::StartCmdFrame(uint32_t framebulkId, uint32_t msec, double remain
 	writer.Uint(framebulkId);
 }
 
-void LogWriter::SetNonsharedSeed(uint32_t seed)
+void LogWriter::SetSharedSeed(uint32_t seed)
 {
-	writer.Key("nss");
+	writer.Key("ss");
 	writer.Uint(seed);
 }
 

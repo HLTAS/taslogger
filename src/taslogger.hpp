@@ -55,7 +55,7 @@ namespace TASLogger
 		void StartCmdFrame(uint32_t framebulkId, uint32_t msec, double remainder);
 		void EndCmdFrame();
 
-		void SetNonsharedSeed(uint32_t seed);
+		void SetSharedSeed(uint32_t seed);
 		void SetViewangles(double yaw, double pitch, double roll);
 		void SetPunchangles(double yaw, double pitch, double roll);
 		void SetButtons(uint32_t buttons);
