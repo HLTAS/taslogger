@@ -17,7 +17,7 @@ void LogWriter::Clear()
 	writer.Reset(stringBuffer);
 }
 
-void LogWriter::StartLog(const char *toolVer, const char *gameVer, const char *mod)
+void LogWriter::StartLog(const char *toolVer, int buildNumber, const char *mod)
 {
 	Clear();
 
@@ -26,8 +26,8 @@ void LogWriter::StartLog(const char *toolVer, const char *gameVer, const char *m
 	writer.Key("tool_ver");
 	writer.String(toolVer);
 
-	writer.Key("game_ver");
-	writer.String(gameVer);
+	writer.Key("build");
+	writer.Int(buildNumber);
 
 	writer.Key("mod");
 	writer.String(mod);

@@ -43,7 +43,7 @@ namespace TASLogger
 	public:
 		LogWriter();
 
-		void StartLog(const char *toolVer, const char *gameVer, const char *mod);
+		void StartLog(const char *toolVer, int buildNumber, const char *mod);
 		void EndLog();
 
 		void StartPhysicsFrame(double frameTime, bool paused, const char *cbuf);
