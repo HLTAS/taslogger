@@ -46,7 +46,7 @@ namespace TASLogger
 		void StartLog(const char *toolVer, int buildNumber, const char *mod);
 		void EndLog();
 
-		void StartPhysicsFrame(double frameTime, bool paused, const char *cbuf);
+		void StartPhysicsFrame(double frameTime, int32_t clstate, bool paused, const char *cbuf);
 		void EndPhysicsFrame();
 
 		void PushDamage(const Damage damage);

@@ -42,12 +42,17 @@ void LogWriter::EndLog()
 	writer.EndObject();
 }
 
-void LogWriter::StartPhysicsFrame(double frameTime, bool paused, const char *cbuf)
+void LogWriter::StartPhysicsFrame(double frameTime, int32_t clstate, bool paused, const char *cbuf)
 {
 	writer.StartObject();
 
 	writer.Key("ft");
 	writer.Double(frameTime);
+
+	if (clstate != 5) {
+		writer.Key("cls");
+		writer.Int(clstate);
+	}
 
 	writer.Key("cbuf");
 	writer.String(cbuf);
