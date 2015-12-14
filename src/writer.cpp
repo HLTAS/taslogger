@@ -17,7 +17,7 @@ void LogWriter::Clear()
 	writer.Reset(stringBuffer);
 }
 
-void LogWriter::StartLog(const char *toolVer, int buildNumber, const char *mod)
+void LogWriter::StartLog(const char *toolVer, int32_t buildNumber, const char *mod)
 {
 	Clear();
 
