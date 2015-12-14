@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cinttypes>
 #include <deque>
 #include <string>
 #include "taslogger/common.hpp"
