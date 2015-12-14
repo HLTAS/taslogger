@@ -1,5 +1,4 @@
-#ifndef TASLOGGER_HPP
-#define TASLOGGER_HPP
+#pragma once
 
 #include <cinttypes>
 #include <deque>
@@ -71,5 +70,3 @@ namespace TASLogger
 		std::deque<ObjectMove> objectMoveQueue;
 	};
 }
-
-#endif
