@@ -1,4 +1,4 @@
-#include "taslogger.hpp"
+#include "taslogger/writer.hpp"
 
 using namespace TASLogger;
 

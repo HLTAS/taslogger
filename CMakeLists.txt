@@ -11,8 +11,8 @@ else ()
 	message (FATAL_ERROR "Could not find RapidJSON include directory.")
 endif ()
 
-include_directories (${RapidJSON_INCLUDE_DIR})
+include_directories (. ${RapidJSON_INCLUDE_DIR})
 
 set (CMAKE_CXX_STANDARD 11)
 
-add_library (taslogger src/taslogger.cpp)
+add_library (taslogger src/writer.cpp)
