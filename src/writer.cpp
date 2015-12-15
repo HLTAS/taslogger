@@ -133,12 +133,12 @@ void LogWriter::EndPhysicsFrame()
 	writer.EndObject();
 }
 
-void LogWriter::PushDamage(const Damage damage)
+void LogWriter::PushDamage(const Damage &damage)
 {
 	damageQueue.push_back(damage);
 }
 
-void LogWriter::PushObjectMove(const ObjectMove objectMove)
+void LogWriter::PushObjectMove(const ObjectMove &objectMove)
 {
 	objectMoveQueue.push_back(objectMove);
 }

@@ -19,8 +19,8 @@ namespace TASLogger
 		void StartPhysicsFrame(double frameTime, int32_t clstate, bool paused, const char *cbuf);
 		void EndPhysicsFrame();
 
-		void PushDamage(const Damage damage);
-		void PushObjectMove(const ObjectMove objectMove);
+		void PushDamage(const Damage &damage);
+		void PushObjectMove(const ObjectMove &objectMove);
 
 		void StartCmdFrame(uint32_t framebulkId, uint32_t msec, double remainder);
 		void EndCmdFrame();
