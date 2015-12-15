@@ -101,20 +101,20 @@ public:
 	InternalHandler();
 
 	bool Null();
-    bool Bool(bool b);
-    bool Int(int i);
-    bool Uint(unsigned i);
-    bool Int64(int64_t i);
-    bool Uint64(uint64_t i);
-    bool Double(double d);
-    bool String(const char *str, rapidjson::SizeType length, bool copy);
-    bool StartObject();
-    bool Key(const char *str, rapidjson::SizeType length, bool copy);
-    bool EndObject(rapidjson::SizeType memberCount);
-    bool StartArray();
-    bool EndArray(rapidjson::SizeType elementCount);
+	bool Bool(bool b);
+	bool Int(int i);
+	bool Uint(unsigned i);
+	bool Int64(int64_t i);
+	bool Uint64(uint64_t i);
+	bool Double(double d);
+	bool String(const char *str, rapidjson::SizeType length, bool copy);
+	bool StartObject();
+	bool Key(const char *str, rapidjson::SizeType length, bool copy);
+	bool EndObject(rapidjson::SizeType memberCount);
+	bool StartArray();
+	bool EndArray(rapidjson::SizeType elementCount);
 
-    inline TASLog GetTASLog() const { return tasLog; }
+	inline TASLog GetTASLog() const { return tasLog; }
 
 private:
 	TASLog tasLog;
