@@ -68,6 +68,8 @@ void LogWriter::StartPhysicsFrame(double frameTime, int32_t clstate, bool paused
 
 void LogWriter::EndPhysicsFrame()
 {
+	writer.EndArray();
+
 	if (!damageQueue.empty()) {
 		writer.Key(KEY_DAMAGES);
 		writer.StartArray();
@@ -128,7 +130,6 @@ void LogWriter::EndPhysicsFrame()
 		writer.EndArray();
 	}
 
-	writer.EndArray();
 	writer.EndObject();
 }
 
