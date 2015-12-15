@@ -212,8 +212,6 @@ bool InternalHandler::Null()
 
 bool InternalHandler::Bool(bool b)
 {
-	// printf("Bool()\n");
-
 	switch (state) {
 	case StatePaused:
 		tasLog.physicsFrameList.back().paused = b;
@@ -244,8 +242,6 @@ bool InternalHandler::Bool(bool b)
 
 bool InternalHandler::Int(int)
 {
-	// printf("Int()\n");
-
 	return false;
 }
 
@@ -320,8 +316,6 @@ bool InternalHandler::Uint64(uint64_t)
 
 bool InternalHandler::Double(double d)
 {
-	// printf("Double()\n");
-
 	switch (state) {
 	case StateFrameTime:
 		tasLog.physicsFrameList.back().frameTime = static_cast<float>(d);
@@ -434,8 +428,6 @@ bool InternalHandler::Double(double d)
 
 bool InternalHandler::String(const char *str, rapidjson::SizeType length, bool)
 {
-	// printf("String(%s)\n", str);
-
 	switch (state) {
 	case StateToolVersion:
 		tasLog.toolVersion = std::string(str, length);
@@ -463,8 +455,6 @@ bool InternalHandler::String(const char *str, rapidjson::SizeType length, bool)
 
 bool InternalHandler::StartObject()
 {
-	// printf("StartObject()\n");
-
 	switch (state) {
 	case StateLog:
 		break;
@@ -538,8 +528,6 @@ bool InternalHandler::StartObject()
 
 bool InternalHandler::Key(const char *str, rapidjson::SizeType, bool)
 {
-	// printf("Key(%s)\n", str);
-
 	switch (state) {
 	case StateLog:
 		state = STATE_TABLE_LOG.at(str);
@@ -576,8 +564,6 @@ bool InternalHandler::Key(const char *str, rapidjson::SizeType, bool)
 
 bool InternalHandler::EndObject(rapidjson::SizeType)
 {
-	// printf("EndObject()\n");
-
 	switch (state) {
 	case StateLog:
 		break;
@@ -611,8 +597,6 @@ bool InternalHandler::EndObject(rapidjson::SizeType)
 
 bool InternalHandler::StartArray()
 {
-	// printf("StartArray()\n");
-
 	switch (state) {
 	case StatePhysicsFrameList:
 		tasLog.physicsFrameList.reserve(10000);
@@ -669,8 +653,6 @@ bool InternalHandler::StartArray()
 
 bool InternalHandler::EndArray(rapidjson::SizeType)
 {
-	// printf("EndArray()\n");
-
 	switch (state) {
 	case StatePhysicsFrameList:
 		state = StateLog;
