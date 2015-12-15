@@ -15,4 +15,4 @@ include_directories (. ${RapidJSON_INCLUDE_DIR})
 
 set (CMAKE_CXX_STANDARD 11)
 
-add_library (taslogger src/writer.cpp)
+add_library (taslogger src/writer.cpp src/reader.cpp)

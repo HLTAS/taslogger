@@ -62,7 +62,7 @@ void LogWriter::StartPhysicsFrame(double frameTime, int32_t clstate, bool paused
 		writer.Bool(paused);
 	}
 
-	writer.Key(KEY_COMMAND_BUFFER);
+	writer.Key(KEY_COMMAND_FRAMES);
 	writer.StartArray();
 }
 
