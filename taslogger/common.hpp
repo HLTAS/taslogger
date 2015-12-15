@@ -21,7 +21,7 @@ namespace TASLogger
 	const char KEY_IS_PULL[] = "pull";
 	const char KEY_OBJECT_VELOCITY[] = "vel";
 	const char KEY_OBJECT_POSITION[] = "pos";
-	const char KEY_MILLISECONDS[] = "msec";
+	const char KEY_MILLISECONDS[] = "ms";
 	const char KEY_FRAMETIME_REMAINDER[] = "rem";
 	const char KEY_FRAMEBULK_ID[] = "bid";
 	const char KEY_SHARED_SEED[] = "ss";
