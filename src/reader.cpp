@@ -220,13 +220,13 @@ bool InternalHandler::Bool(bool b)
 		state = StateObjectMove;
 		break;
 	case StateOnGround: {
-		CommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
+		ReaderCommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
 		(prePlayerMove ? frame.prePMState : frame.postPMState).onGround = b;
 		state = prePlayerMove ? StatePrePlayerMove : StatePostPlayerMove;
 		break;
 	}
 	case StateOnLadder: {
-		CommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
+		ReaderCommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
 		(prePlayerMove ? frame.prePMState : frame.postPMState).onLadder = b;
 		state = prePlayerMove ? StatePrePlayerMove : StatePostPlayerMove;
 		break;
@@ -279,13 +279,13 @@ bool InternalHandler::Uint(unsigned i)
 		state = StateCommandFrame;
 		break;
 	case StateWaterLevel: {
-		CommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
+		ReaderCommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
 		(prePlayerMove ? frame.prePMState : frame.postPMState).waterLevel = static_cast<uint8_t>(i);
 		state = prePlayerMove ? StatePrePlayerMove : StatePostPlayerMove;
 		break;
 	}
 	case StateDuckState: {
-		CommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
+		ReaderCommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
 		(prePlayerMove ? frame.prePMState : frame.postPMState).duckState = static_cast<uint8_t>(i);
 		state = prePlayerMove ? StatePrePlayerMove : StatePostPlayerMove;
 		break;
@@ -320,23 +320,26 @@ bool InternalHandler::Double(double d)
 		state = StatePhysicsFrame;
 		break;
 	case StateDamageAmount:
-		tasLog.physicsFrameList.back().damageList.back().damage = d;
+		tasLog.physicsFrameList.back().damageList.back().damage = static_cast<float>(d);
 		state = StateDamage;
 		break;
 	case StateDamageDirection:
 		if (arrayIndex >= 3)
 			return false;
-		tasLog.physicsFrameList.back().damageList.back().direction[arrayIndex++] = d;
+		tasLog.physicsFrameList.back().damageList.back()
+			.direction[arrayIndex++] = static_cast<float>(d);
 		break;
 	case StateObjectVelocity:
 		if (arrayIndex >= 3)
 			return false;
-		tasLog.physicsFrameList.back().objectMoveList.back().velocity[arrayIndex++] = d;
+		tasLog.physicsFrameList.back().objectMoveList.back()
+			.velocity[arrayIndex++] = static_cast<float>(d);
 		break;
 	case StateObjectPosition:
 		if (arrayIndex >= 3)
 			return false;
-		tasLog.physicsFrameList.back().objectMoveList.back().position[arrayIndex++] = d;
+		tasLog.physicsFrameList.back().objectMoveList.back()
+			.position[arrayIndex++] = static_cast<float>(d);
 		break;
 	case StateFrameTimeRemainder:
 		tasLog.physicsFrameList.back().commandFrameList.back()
@@ -380,7 +383,7 @@ bool InternalHandler::Double(double d)
 	case StateVelocity: {
 		if (arrayIndex >= 3)
 			return false;
-		CommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
+		ReaderCommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
 		(prePlayerMove ? frame.prePMState : frame.postPMState)
 			.velocity[arrayIndex++] = static_cast<float>(d);
 		break;
@@ -388,7 +391,7 @@ bool InternalHandler::Double(double d)
 	case StatePosition: {
 		if (arrayIndex >= 3)
 			return false;
-		CommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
+		ReaderCommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
 		(prePlayerMove ? frame.prePMState : frame.postPMState)
 			.position[arrayIndex++] = static_cast<float>(d);
 		break;
@@ -396,7 +399,7 @@ bool InternalHandler::Double(double d)
 	case StateBaseVelocity: {
 		if (arrayIndex >= 3)
 			return false;
-		CommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
+		ReaderCommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
 		(prePlayerMove ? frame.prePMState : frame.postPMState)
 			.baseVelocity[arrayIndex++] = static_cast<float>(d);
 		break;
@@ -405,17 +408,18 @@ bool InternalHandler::Double(double d)
 		if (arrayIndex >= 3)
 			return false;
 		tasLog.physicsFrameList.back().commandFrameList.back().collisionList.back()
-			.normal[arrayIndex++] = d;
+			.normal[arrayIndex++] = static_cast<float>(d);
 		break;
 	case StateCollisionPlaneDistance:
-		tasLog.physicsFrameList.back().commandFrameList.back().collisionList.back().distance = d;
+		tasLog.physicsFrameList.back().commandFrameList.back().collisionList.back()
+			.distance = static_cast<float>(d);
 		state = StateCollision;
 		break;
 	case StateImpactVelocity:
 		if (arrayIndex >= 3)
 			return false;
 		tasLog.physicsFrameList.back().commandFrameList.back().collisionList.back()
-			.impactVelocity[arrayIndex++] = d;
+			.impactVelocity[arrayIndex++] = static_cast<float>(d);
 		break;
 	default:
 		return false;
@@ -458,14 +462,14 @@ bool InternalHandler::StartObject()
 		break;
 	case StatePhysicsFrameList:
 		state = StatePhysicsFrame;
-		tasLog.physicsFrameList.push_back(PhysicsFrame());
+		tasLog.physicsFrameList.push_back(ReaderPhysicsFrame());
 		tasLog.physicsFrameList.back().paused = false;
 		tasLog.physicsFrameList.back().clientState = 5;
 		break;
 	case StateDamageList: {
 		state = StateDamage;
-		std::vector<Damage> &damageList = tasLog.physicsFrameList.back().damageList;
-		damageList.push_back(Damage());
+		std::vector<ReaderDamage> &damageList = tasLog.physicsFrameList.back().damageList;
+		damageList.push_back(ReaderDamage());
 		damageList.back().direction[0] = 0;
 		damageList.back().direction[1] = 0;
 		damageList.back().direction[2] = 0;
@@ -473,17 +477,18 @@ bool InternalHandler::StartObject()
 	}
 	case StateObjectMoveList: {
 		state = StateObjectMove;
-		std::vector<ObjectMove> &objectMoveList = tasLog.physicsFrameList.back().objectMoveList;
-		objectMoveList.push_back(ObjectMove());
+		std::vector<ReaderObjectMove> &objectMoveList = tasLog.physicsFrameList.back()
+			.objectMoveList;
+		objectMoveList.push_back(ReaderObjectMove());
 		objectMoveList.back().pull = true;
 		break;
 	}
 	case StateCommandFrameList: {
 		state = StateCommandFrame;
-		std::vector<CommandFrame> &commandFrameList = tasLog.physicsFrameList.back()
+		std::vector<ReaderCommandFrame> &commandFrameList = tasLog.physicsFrameList.back()
 			.commandFrameList;
-		commandFrameList.push_back(CommandFrame());
-		CommandFrame &frame = commandFrameList.back();
+		commandFrameList.push_back(ReaderCommandFrame());
+		ReaderCommandFrame &frame = commandFrameList.back();
 		frame.punchangles[0] = 0;
 		frame.punchangles[1] = 0;
 		frame.punchangles[2] = 0;
@@ -493,7 +498,7 @@ bool InternalHandler::StartObject()
 		break;
 	}
 	case StatePrePlayerMove: {
-		CommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
+		ReaderCommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
 		frame.prePMState.baseVelocity[0] = 0;
 		frame.prePMState.baseVelocity[1] = 0;
 		frame.prePMState.baseVelocity[2] = 0;
@@ -503,7 +508,7 @@ bool InternalHandler::StartObject()
 		break;
 	}
 	case StatePostPlayerMove: {
-		CommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
+		ReaderCommandFrame &frame = tasLog.physicsFrameList.back().commandFrameList.back();
 		frame.postPMState.baseVelocity[0] = 0;
 		frame.postPMState.baseVelocity[1] = 0;
 		frame.postPMState.baseVelocity[2] = 0;
@@ -514,7 +519,8 @@ bool InternalHandler::StartObject()
 	}
 	case StateCollisionList: {
 		state = StateCollision;
-		tasLog.physicsFrameList.back().commandFrameList.back().collisionList.push_back(Collision());
+		tasLog.physicsFrameList.back().commandFrameList.back()
+			.collisionList.push_back(ReaderCollision());
 		break;
 	}
 	default:

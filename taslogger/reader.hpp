@@ -7,7 +7,29 @@
 
 namespace TASLogger
 {
-	struct PlayerState
+	struct ReaderCollision
+	{
+		float normal[3];
+		float distance;
+		float impactVelocity[3];
+		int32_t entity;
+	};
+
+	struct ReaderObjectMove
+	{
+		float velocity[3];
+		float position[3];
+		bool pull;
+	};
+
+	struct ReaderDamage
+	{
+		float damage;
+		float direction[3];
+		int32_t damageBits;
+	};
+
+	struct ReaderPlayerState
 	{
 		float position[3];
 		float velocity[3];
@@ -18,12 +40,12 @@ namespace TASLogger
 		uint8_t duckState;
 	};
 
-	struct CommandFrame
+	struct ReaderCommandFrame
 	{
-		PlayerState prePMState;
-		PlayerState postPMState;
+		ReaderPlayerState prePMState;
+		ReaderPlayerState postPMState;
 		std::vector<std::string> consolePrintList;
-		std::vector<Collision> collisionList;
+		std::vector<ReaderCollision> collisionList;
 		float viewangles[3];
 		float punchangles[3];
 		float FSU[3];
@@ -39,12 +61,12 @@ namespace TASLogger
 		uint8_t impulse;
 	};
 
-	struct PhysicsFrame
+	struct ReaderPhysicsFrame
 	{
 		std::string commandBuffer;
-		std::vector<CommandFrame> commandFrameList;
-		std::vector<Damage> damageList;
-		std::vector<ObjectMove> objectMoveList;
+		std::vector<ReaderCommandFrame> commandFrameList;
+		std::vector<ReaderDamage> damageList;
+		std::vector<ReaderObjectMove> objectMoveList;
 		float frameTime;
 		bool paused;
 		int8_t clientState;
@@ -54,7 +76,7 @@ namespace TASLogger
 	{
 		std::string toolVersion;
 		std::string gameMod;
-		std::vector<PhysicsFrame> physicsFrameList;
+		std::vector<ReaderPhysicsFrame> physicsFrameList;
 		int32_t buildNumber;
 	};
 
