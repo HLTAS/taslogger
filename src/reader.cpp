@@ -1,8 +1,6 @@
 #include <unordered_map>
 #include <functional>
 #include "taslogger/reader.hpp"
-#include "rapidjson/reader.h"
-#include "rapidjson/error/en.h"
 
 using namespace TASLogger;
 
@@ -712,15 +710,12 @@ bool InternalHandler::EndArray(rapidjson::SizeType)
 	return true;
 }
 
-TASLog TASLogger::ParseString(const char *json)
+rapidjson::ParseResult TASLogger::ParseString(const char *json, TASLog &tasLog)
 {
 	InternalHandler internalHandler;
 	rapidjson::Reader reader;
 	rapidjson::StringStream ss(json);
 	rapidjson::ParseResult res = reader.Parse(ss, internalHandler);
-	if (!res) {
-		fprintf(stderr, "JSON parse error: %s (%u)\n",
-            rapidjson::GetParseError_En(res.Code()), res.Offset());
-	}
-	return internalHandler.GetTASLog();
+	tasLog = internalHandler.GetTASLog();
+	return res;
 }

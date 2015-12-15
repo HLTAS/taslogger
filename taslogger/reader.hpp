@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "common.hpp"
+#include "rapidjson/reader.h"
 
 namespace TASLogger
 {
@@ -57,5 +58,5 @@ namespace TASLogger
 		int32_t buildNumber;
 	};
 
-	TASLog ParseString(const char *json);
+	rapidjson::ParseResult ParseString(const char *json, TASLog &tasLog);
 }
