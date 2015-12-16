@@ -44,7 +44,6 @@ namespace TASLogger
 	{
 		ReaderPlayerState prePMState;
 		ReaderPlayerState postPMState;
-		std::vector<std::string> consolePrintList;
 		std::vector<ReaderCollision> collisionList;
 		float viewangles[3];
 		float punchangles[3];
@@ -64,6 +63,7 @@ namespace TASLogger
 	struct ReaderPhysicsFrame
 	{
 		std::string commandBuffer;
+		std::vector<std::string> consolePrintList;
 		std::vector<ReaderCommandFrame> commandFrameList;
 		std::vector<ReaderDamage> damageList;
 		std::vector<ReaderObjectMove> objectMoveList;

@@ -70,6 +70,16 @@ void LogWriter::EndPhysicsFrame()
 {
 	writer.EndArray();
 
+	if (!consolePrintQueue.empty()) {
+		writer.Key(KEY_CONSOLE_MESSAGES);
+		writer.StartArray();
+		while (!consolePrintQueue.empty()) {
+			writer.String(consolePrintQueue.front().c_str());
+			consolePrintQueue.pop_front();
+		}
+		writer.EndArray();
+	}
+
 	if (!damageQueue.empty()) {
 		writer.Key(KEY_DAMAGES);
 		writer.StartArray();
@@ -338,16 +348,6 @@ void LogWriter::SetArmor(double armor)
 
 void LogWriter::EndCmdFrame()
 {
-	if (!consolePrintQueue.empty()) {
-		writer.Key(KEY_CONSOLE_MESSAGES);
-		writer.StartArray();
-		while (!consolePrintQueue.empty()) {
-			writer.String(consolePrintQueue.front().c_str());
-			consolePrintQueue.pop_front();
-		}
-		writer.EndArray();
-	}
-
 	if (!collisionQueue.empty()) {
 		writer.Key(KEY_COLLISIONS);
 		writer.StartArray();

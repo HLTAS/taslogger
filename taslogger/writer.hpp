@@ -19,6 +19,7 @@ namespace TASLogger
 		void StartPhysicsFrame(double frameTime, int32_t clstate, bool paused, const char *cbuf);
 		void EndPhysicsFrame();
 
+		void PushConsolePrint(const char *message);
 		void PushDamage(const Damage &damage);
 		void PushObjectMove(const ObjectMove &objectMove);
 
@@ -36,7 +37,6 @@ namespace TASLogger
 		void SetHealth(double health);
 		void SetArmor(double armor);
 
-		void PushConsolePrint(const char *message);
 		void PushCollision(const Collision &collision);
 		void SetCollisions(const std::deque<Collision> collisions);
 

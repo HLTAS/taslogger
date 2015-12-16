@@ -18,6 +18,9 @@ enum ParseState
 	StatePaused,
 	StateClientState,
 
+	StateConsoleMessageList,
+	StateConsoleMessage,
+
 	StateDamageList,
 	StateDamage,
 	StateDamageAmount,
@@ -47,9 +50,6 @@ enum ParseState
 	StateArmor,
 	StatePrePlayerMove,
 	StatePostPlayerMove,
-
-	StateConsoleMessageList,
-	StateConsoleMessage,
 
 	StateCollisionList,
 	StateCollision,
@@ -149,7 +149,8 @@ InternalHandler::InternalHandler()
 		{KEY_CLIENT_STATE, StateClientState},
 		{KEY_DAMAGES, StateDamageList},
 		{KEY_OBJECT_BOOSTS, StateObjectMoveList},
-		{KEY_COMMAND_FRAMES, StateCommandFrameList}
+		{KEY_COMMAND_FRAMES, StateCommandFrameList},
+		{KEY_CONSOLE_MESSAGES, StateConsoleMessageList}
 	}),
 
 	STATE_TABLE_DAMAGE({
@@ -178,7 +179,6 @@ InternalHandler::InternalHandler()
 		{KEY_ENT_GRAVITY, StateEntGravity},
 		{KEY_HEALTH, StateHealth},
 		{KEY_ARMOR, StateArmor},
-		{KEY_CONSOLE_MESSAGES, StateConsoleMessageList},
 		{KEY_PRE_PLAYERMOVE, StatePrePlayerMove},
 		{KEY_POST_PLAYERMOVE, StatePostPlayerMove},
 		{KEY_COLLISIONS, StateCollisionList}
@@ -444,9 +444,7 @@ bool InternalHandler::String(const char *str, rapidjson::SizeType length, bool)
 		state = StatePhysicsFrame;
 		break;
 	case StateConsoleMessageList:
-		tasLog.physicsFrameList.back().commandFrameList.back().consolePrintList.push_back(
-			std::string(str, length)
-		);
+		tasLog.physicsFrameList.back().consolePrintList.push_back(std::string(str, length));
 		break;
 	default:
 		return false;
@@ -698,7 +696,7 @@ bool InternalHandler::EndArray(rapidjson::SizeType)
 		state = prePlayerMove ? StatePrePlayerMove : StatePostPlayerMove;
 		break;
 	case StateConsoleMessageList:
-		state = StateCommandFrame;
+		state = StatePhysicsFrame;
 		break;
 	case StateCollisionList:
 		state = StateCommandFrame;
