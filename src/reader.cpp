@@ -1,5 +1,6 @@
 #include <unordered_map>
 #include <functional>
+#include "rapidjson/filereadstream.h"
 #include "taslogger/reader.hpp"
 
 using namespace TASLogger;
@@ -714,12 +715,13 @@ bool InternalHandler::EndArray(rapidjson::SizeType)
 	return true;
 }
 
-rapidjson::ParseResult TASLogger::ParseString(const char *json, TASLog &tasLog)
+rapidjson::ParseResult TASLogger::ParseFile(FILE *file, TASLog &tasLog)
 {
+	char buf[65536];
+	rapidjson::FileReadStream fs(file, buf, sizeof(buf));
 	InternalHandler internalHandler;
 	rapidjson::Reader reader;
-	rapidjson::StringStream ss(json);
-	rapidjson::ParseResult res = reader.Parse(ss, internalHandler);
+	rapidjson::ParseResult res = reader.Parse(fs, internalHandler);
 	tasLog = internalHandler.GetTASLog();
 	return res;
 }

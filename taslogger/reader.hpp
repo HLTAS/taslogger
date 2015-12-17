@@ -80,5 +80,5 @@ namespace TASLogger
 		int32_t buildNumber;
 	};
 
-	rapidjson::ParseResult ParseString(const char *json, TASLog &tasLog);
+	rapidjson::ParseResult ParseFile(FILE *file, TASLog &tasLog);
 }
