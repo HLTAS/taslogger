@@ -531,34 +531,38 @@ bool InternalHandler::StartObject()
 
 bool InternalHandler::Key(const char *str, rapidjson::SizeType, bool)
 {
-	switch (state) {
-	case StateLog:
-		state = STATE_TABLE_LOG.at(str);
-		break;
-	case StatePhysicsFrame:
-		state = STATE_TABLE_PHYSICS_FRAME.at(str);
-		break;
-	case StateCommandFrame:
-		state = STATE_TABLE_COMMAND_FRAME.at(str);
-		break;
-	case StatePrePlayerMove:
-		state = STATE_TABLE_PLAYER.at(str);
-		prePlayerMove = true;
-		break;
-	case StatePostPlayerMove:
-		state = STATE_TABLE_PLAYER.at(str);
-		prePlayerMove = false;
-		break;
-	case StateDamage:
-		state = STATE_TABLE_DAMAGE.at(str);
-		break;
-	case StateObjectMove:
-		state = STATE_TABLE_OBJECT_MOVE.at(str);
-		break;
-	case StateCollision:
-		state = STATE_TABLE_COLLISION.at(str);
-		break;
-	default:
+	try {
+		switch (state) {
+		case StateLog:
+			state = STATE_TABLE_LOG.at(str);
+			break;
+		case StatePhysicsFrame:
+			state = STATE_TABLE_PHYSICS_FRAME.at(str);
+			break;
+		case StateCommandFrame:
+			state = STATE_TABLE_COMMAND_FRAME.at(str);
+			break;
+		case StatePrePlayerMove:
+			state = STATE_TABLE_PLAYER.at(str);
+			prePlayerMove = true;
+			break;
+		case StatePostPlayerMove:
+			state = STATE_TABLE_PLAYER.at(str);
+			prePlayerMove = false;
+			break;
+		case StateDamage:
+			state = STATE_TABLE_DAMAGE.at(str);
+			break;
+		case StateObjectMove:
+			state = STATE_TABLE_OBJECT_MOVE.at(str);
+			break;
+		case StateCollision:
+			state = STATE_TABLE_COLLISION.at(str);
+			break;
+		default:
+			return false;
+		}
+	} catch (std::out_of_range) {
 		return false;
 	}
 
