@@ -3,8 +3,13 @@
 using namespace TASLogger;
 
 LogWriter::LogWriter()
-	: writer(stringBuffer)
 {
+}
+
+LogWriter::~LogWriter()
+{
+	if (pFileWriteStream)
+		delete pFileWriteStream;
 }
 
 void LogWriter::Clear()
@@ -13,13 +18,20 @@ void LogWriter::Clear()
 	damageQueue.clear();
 	objectMoveQueue.clear();
 	collisionQueue.clear();
-	stringBuffer.Clear();
-	writer.Reset(stringBuffer);
+	if (pFileWriteStream) {
+		delete pFileWriteStream;
+		pFileWriteStream = nullptr;
+	}
 }
 
-void LogWriter::StartLog(const char *toolVer, int32_t buildNumber, const char *mod)
+void LogWriter::StartLog(FILE *file, const char *toolVer, int32_t buildNumber, const char *mod)
 {
+	static char writeBuffer[65536];
+
 	Clear();
+
+	pFileWriteStream = new rapidjson::FileWriteStream(file, writeBuffer, sizeof(writeBuffer));
+	writer.Reset(*pFileWriteStream);
 
 	writer.StartObject();
 

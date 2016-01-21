@@ -4,7 +4,7 @@
 #include <string>
 #include "taslogger/common.hpp"
 #include "rapidjson/writer.h"
-#include "rapidjson/stringbuffer.h"
+#include "rapidjson/filewritestream.h"
 
 namespace TASLogger
 {
@@ -12,8 +12,9 @@ namespace TASLogger
 	{
 	public:
 		LogWriter();
+		~LogWriter();
 
-		void StartLog(const char *toolVer, int32_t buildNumber, const char *mod);
+		void StartLog(FILE *file, const char *toolVer, int32_t buildNumber, const char *mod);
 		void EndLog();
 
 		void StartPhysicsFrame(double frameTime, int32_t clstate, bool paused, const char *cbuf);
@@ -54,14 +55,9 @@ namespace TASLogger
 
 		void Clear();
 
-		inline const char *GetString() const
-		{
-			return stringBuffer.GetString();
-		}
-
 	private:
-		rapidjson::StringBuffer stringBuffer;
-		rapidjson::Writer<rapidjson::StringBuffer> writer;
+		rapidjson::Writer<rapidjson::FileWriteStream> writer;
+		rapidjson::FileWriteStream *pFileWriteStream = nullptr;
 
 		std::deque<std::string> consolePrintQueue;
 		std::deque<Damage> damageQueue;
