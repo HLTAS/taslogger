@@ -1,0 +1,46 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Install RapidJSON on Ubuntu
+      if: matrix.os == 'ubuntu-latest'
+      run: sudo apt install rapidjson-dev
+
+    - name: Download RapidJSON on Windows
+      if: matrix.os == 'windows-latest'
+      run: |
+        $client = New-Object System.Net.WebClient
+        $client.DownloadFile("https://github.com/Tencent/rapidjson/archive/v1.1.0.zip", "../rapidjson.zip")
+        # The output path in DownloadFile seems to be relative to the powershell starting directory,
+        # not the current directory. So cd .. afterwards to avoid confusion.
+        cd ..
+        7z x rapidjson.zip
+
+    - name: Install RapidJSON on macOS
+      if: matrix.os == 'macOS-latest'
+      run: brew install rapidjson
+
+    - name: Generate the build system
+      run: |
+        mkdir build
+        cd build
+        cmake -DRapidJSON_ROOT="$RapidJSON_ROOT" ..
+      shell: bash
+      env:
+        # For Windows.
+        RapidJSON_ROOT: ../rapidjson-1.1.0
+
+    - name: Build
+      run: cmake --build build
