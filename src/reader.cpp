@@ -1,5 +1,6 @@
 #include <unordered_map>
 #include <functional>
+#include <stdexcept>
 #include "rapidjson/filereadstream.h"
 #include "taslogger/reader.hpp"
 
