@@ -569,7 +569,7 @@ bool InternalHandler::Key(const char *str, rapidjson::SizeType, bool)
 		default:
 			return false;
 		}
-	} catch (std::out_of_range) {
+	} catch (const std::out_of_range&) {
 		return false;
 	}
 
