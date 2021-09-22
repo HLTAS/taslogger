@@ -19,6 +19,7 @@ enum ParseState
 	StateCommandBuffer,
 	StatePaused,
 	StateClientState,
+	StateRng,
 
 	StateConsoleMessageList,
 	StateConsoleMessage,
@@ -66,7 +67,11 @@ enum ParseState
 	StateOnGround,
 	StateOnLadder,
 	StateWaterLevel,
-	StateDuckState
+	StateDuckState,
+
+	StateIdum,
+	StateIy,
+	StateIv
 };
 
 struct CharStringEqualTo
@@ -133,6 +138,7 @@ private:
 	const StateTableType STATE_TABLE_COMMAND_FRAME;
 	const StateTableType STATE_TABLE_COLLISION;
 	const StateTableType STATE_TABLE_PLAYER;
+	const StateTableType STATE_TABLE_RNG;
 };
 
 InternalHandler::InternalHandler()
@@ -153,7 +159,8 @@ InternalHandler::InternalHandler()
 		{KEY_DAMAGES, StateDamageList},
 		{KEY_OBJECT_BOOSTS, StateObjectMoveList},
 		{KEY_COMMAND_FRAMES, StateCommandFrameList},
-		{KEY_CONSOLE_MESSAGES, StateConsoleMessageList}
+		{KEY_CONSOLE_MESSAGES, StateConsoleMessageList},
+		{KEY_RNG, StateRng},
 	}),
 
 	STATE_TABLE_DAMAGE({
@@ -193,7 +200,7 @@ InternalHandler::InternalHandler()
 		{KEY_COLLISION_PLANE_DISTANCE, StateCollisionPlaneDistance},
 		{KEY_COLLISION_IMPACT_VELOCITY, StateImpactVelocity}
 	}),
-		
+
 	STATE_TABLE_PLAYER({
 		{KEY_VELOCITY, StateVelocity},
 		{KEY_POSITION, StatePosition},
@@ -202,6 +209,12 @@ InternalHandler::InternalHandler()
 		{KEY_ONLADDER, StateOnLadder},
 		{KEY_WATERLEVEL, StateWaterLevel},
 		{KEY_DUCK_STATE, StateDuckState}
+	}),
+
+	STATE_TABLE_RNG({
+		{KEY_IDUM, StateIdum},
+		{KEY_IY, StateIy},
+		{KEY_IV, StateIv}
 	})
 {
 }
@@ -241,9 +254,27 @@ bool InternalHandler::Bool(bool b)
 	return true;
 }
 
-bool InternalHandler::Int(int)
+bool InternalHandler::Int(int i)
 {
-	return false;
+	switch (state) {
+		case StateIdum:
+			tasLog.physicsFrameList.back().rng.idum = i;
+			state = StateRng;
+			break;
+		case StateIy:
+			tasLog.physicsFrameList.back().rng.iy = i;
+			state = StateRng;
+			break;
+		case StateIv:
+			if (arrayIndex >= 32)
+				return false;
+			tasLog.physicsFrameList.back().rng.iv[arrayIndex++] = i;
+			break;
+		default:
+			return false;
+	}
+
+	return true;
 }
 
 bool InternalHandler::Uint(unsigned i)
@@ -297,6 +328,19 @@ bool InternalHandler::Uint(unsigned i)
 		tasLog.physicsFrameList.back().commandFrameList.back().collisionList.back()
 			.entity = static_cast<int8_t>(i);
 		state = StateCollision;
+		break;
+	case StateIdum:
+		tasLog.physicsFrameList.back().rng.idum = static_cast<int32_t>(i);
+		state = StateRng;
+		break;
+	case StateIy:
+		tasLog.physicsFrameList.back().rng.iy = static_cast<int32_t>(i);
+		state = StateRng;
+		break;
+	case StateIv:
+		if (arrayIndex >= 32)
+			return false;
+		tasLog.physicsFrameList.back().rng.iv[arrayIndex++] = static_cast<int32_t>(i);
 		break;
 	default:
 		return false;
@@ -465,6 +509,7 @@ bool InternalHandler::StartObject()
 {
 	switch (state) {
 	case StateLog:
+	case StateRng:
 		break;
 	case StatePhysicsFrameList:
 		state = StatePhysicsFrame;
@@ -566,6 +611,9 @@ bool InternalHandler::Key(const char *str, rapidjson::SizeType, bool)
 		case StateCollision:
 			state = STATE_TABLE_COLLISION.at(str);
 			break;
+		case StateRng:
+			state = STATE_TABLE_RNG.at(str);
+			break;
 		default:
 			return false;
 		}
@@ -601,6 +649,9 @@ bool InternalHandler::EndObject(rapidjson::SizeType)
 		break;
 	case StateCollision:
 		state = StateCollisionList;
+		break;
+	case StateRng:
+		state = StatePhysicsFrame;
 		break;
 	default:
 		return false;
@@ -656,6 +707,9 @@ bool InternalHandler::StartArray()
 		arrayIndex = 0;
 		break;
 	case StateImpactVelocity:
+		arrayIndex = 0;
+		break;
+	case StateIv:
 		arrayIndex = 0;
 		break;
 	default:
@@ -718,6 +772,9 @@ bool InternalHandler::EndArray(rapidjson::SizeType)
 		break;
 	case StateImpactVelocity:
 		state = StateCollision;
+		break;
+	case StateIv:
+		state = StateRng;
 		break;
 	default:
 		return false;

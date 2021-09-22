@@ -10,6 +10,7 @@ namespace TASLogger
 	const char KEY_PHYSICS_FRAMES[] = "pf";
 	const char KEY_FRAMETIME[] = "ft";
 	const char KEY_CLIENT_STATE[] = "cls";
+	const char KEY_RNG[] = "rng";
 	const char KEY_COMMAND_BUFFER[] = "cbuf";
 	const char KEY_PAUSED[] = "p";
 	const char KEY_COMMAND_FRAMES[] = "cf";
@@ -49,6 +50,9 @@ namespace TASLogger
 	const char KEY_COLLISION_PLANE_NORMAL[] = "n";
 	const char KEY_COLLISION_PLANE_DISTANCE[] = "d";
 	const char KEY_COLLISION_IMPACT_VELOCITY[] = "ivel";
+	const char KEY_IDUM[] = "idum";
+	const char KEY_IY[] = "iy";
+	const char KEY_IV[] = "iv";
 
 	struct Damage
 	{

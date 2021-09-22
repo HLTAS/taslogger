@@ -60,6 +60,13 @@ namespace TASLogger
 		uint8_t impulse;
 	};
 
+	struct ReaderRng
+	{
+		int32_t idum;
+		int32_t iy;
+		int32_t iv[32];
+	};
+
 	struct ReaderPhysicsFrame
 	{
 		std::string commandBuffer;
@@ -70,6 +77,7 @@ namespace TASLogger
 		float frameTime;
 		bool paused;
 		int8_t clientState;
+		ReaderRng rng;
 	};
 
 	struct TASLog
